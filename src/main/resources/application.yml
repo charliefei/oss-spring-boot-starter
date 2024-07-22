@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: oss-spring-boot-starter
+oss:
+  type: aliyun
+  aliyun:
+    baseUrl: https://your-bucket-name.oss-cn-shanghai.aliyuncs.com/
+    endpoint: https://oss-cn-hangzhou.aliyuncs.com
+    accessKeyId: your-access-key-id
+    accessKeySecret: your-access-key-secret
+    bucketName: your-bucket-name
+    folderPrefix: /files
+  tencent:
+    baseUrl: https://your-bucket-name.cos.ap-shanghai.myqcloud.com/
+    accessKey: your-access-key
+    secretKey: your-secret-key
+    regionName: your-region-name
+    bucketName: your-bucket-name
+    folderPrefix: /files
