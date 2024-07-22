@@ -12,8 +12,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Copyright (C), 群杰物联
- *
  * @author charliefei
  * @version V1.0
  * @description 描述信息

@@ -4,8 +4,6 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * Copyright (C), 群杰物联
- *
  * @author charliefei
  * @version V1.0
  * @description 描述信息
