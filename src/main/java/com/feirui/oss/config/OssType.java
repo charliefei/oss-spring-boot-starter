@@ -7,7 +7,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum OssType {
     aliyun(1, "aliyun"),
-    tencent(2, "tencent");
+    tencent(2, "tencent"),
+    local(3, "local");
 
     private final int code;
     private final String desc;

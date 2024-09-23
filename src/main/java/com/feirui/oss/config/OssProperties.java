@@ -21,6 +21,8 @@ public class OssProperties {
 
     private Tencent tencent = new Tencent();
 
+    private Local local = new Local();
+
     @Data
     public static class Aliyun {
         private String baseUrl;
@@ -38,6 +40,11 @@ public class OssProperties {
         private String secretKey;
         private String regionName;
         private String bucketName;
+        private String folderPrefix;
+    }
+
+    @Data
+    public static class Local {
         private String folderPrefix;
     }
 }
