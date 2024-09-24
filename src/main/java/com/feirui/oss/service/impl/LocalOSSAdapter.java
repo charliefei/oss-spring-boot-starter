@@ -1,6 +1,8 @@
 package com.feirui.oss.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.feirui.oss.config.OssProperties;
+import com.feirui.oss.config.OssType;
 import com.feirui.oss.domain.dto.UploadFileDto;
 import com.feirui.oss.domain.model.DiskFileModel;
 import com.feirui.oss.service.CloudStorageService;
@@ -25,7 +27,13 @@ public class LocalOSSAdapter implements CloudStorageService {
         InputStream in = uploadFileDto.getInputStream();
         OutputStream out = new FileOutputStream(objectName);
         copyFile(in, out);
-        callback.accept(new DiskFileModel());
+        DiskFileModel diskFileModel = new DiskFileModel();
+        BeanUtil.copyProperties(uploadFileDto, diskFileModel);
+        diskFileModel.setId(uploadFileDto.getFileId());
+        diskFileModel.setPath(objectName);
+        diskFileModel.setSize(uploadFileDto.getFile().getSize());
+        diskFileModel.setOssType(OssType.local.getDesc());
+        callback.accept(diskFileModel);
         log.info("localOSS upload file successfully: {}", objectName);
         return "disk-" + uploadFileDto.getFileName();
     }
