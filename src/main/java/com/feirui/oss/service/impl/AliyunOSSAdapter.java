@@ -2,12 +2,11 @@ package com.feirui.oss.service.impl;
 
 import com.aliyun.oss.OSSClient;
 import com.feirui.oss.config.OssProperties;
+import com.feirui.oss.domain.dto.UploadFileDto;
 import com.feirui.oss.service.CloudStorageService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
-import java.util.Objects;
 
 @Slf4j
 public class AliyunOSSAdapter implements CloudStorageService {
@@ -23,11 +22,10 @@ public class AliyunOSSAdapter implements CloudStorageService {
     }
 
     @Override
-    public String upload(MultipartFile file) throws Exception {
-        String objectName = getObjectName(Objects.requireNonNull(file.getOriginalFilename()),
-                ossConfig.getFolderPrefix());
+    public String upload(UploadFileDto uploadFileDto) throws Exception {
+        String objectName = uploadFileDto.getObjectName(ossConfig.getFolderPrefix());
         ossClient.putObject(ossConfig.getBucketName(),
-                objectName, new ByteArrayInputStream(file.getBytes()));
+                objectName, new ByteArrayInputStream(uploadFileDto.getFile().getBytes()));
         String filePath = ossConfig.getBaseUrl() + objectName;
         log.info("upload OOS successful: {}", filePath);
         return filePath;

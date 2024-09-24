@@ -1,12 +1,11 @@
 package com.feirui.oss.service.impl;
 
 import com.feirui.oss.config.OssProperties;
+import com.feirui.oss.domain.dto.UploadFileDto;
 import com.feirui.oss.service.CloudStorageService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
-import java.util.Objects;
 
 @Slf4j
 public class LocalOSSAdapter implements CloudStorageService {
@@ -18,15 +17,13 @@ public class LocalOSSAdapter implements CloudStorageService {
     }
 
     @Override
-    public String upload(MultipartFile file) throws Exception {
-        String objectName = getObjectName(Objects.requireNonNull(file.getOriginalFilename()),
-                config.getFolderPrefix());
-        InputStream in = file.getInputStream();
+    public String upload(UploadFileDto uploadFileDto) throws Exception {
+        String objectName = uploadFileDto.getObjectName(config.getFolderPrefix());
+        InputStream in = uploadFileDto.getInputStream();
         OutputStream out = new FileOutputStream(objectName);
         copyFile(in, out);
-        String filePath = "";
-        log.info("upload OOS successful: {}", filePath);
-        return filePath;
+        log.info("upload OOS successful: {}", objectName);
+        return "disk-" + uploadFileDto.getFileName();
     }
 
     private static void copyFile(InputStream in, OutputStream out) {
