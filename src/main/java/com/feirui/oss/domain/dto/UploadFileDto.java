@@ -20,13 +20,25 @@ import java.util.UUID;
 public class UploadFileDto {
     private MultipartFile file;
 
+    private String fileId;
+
+    private String fileName;
+
     private String fileType;
 
     private String filePackage;
 
-    private String fileSuffix;
-
     private Boolean pwdSwitch = false;
+
+    {
+        fileId = UUID.randomUUID().toString();
+        if (StringUtils.hasLength(fileType)) {
+            fileName = fileId + "." + fileType;
+        }
+        String originalFilename = file.getOriginalFilename();
+        assert originalFilename != null;
+        fileName = fileId + originalFilename.substring(originalFilename.lastIndexOf("."));
+    }
 
     /**
      * 根据加密开关，获取文件流
@@ -38,16 +50,7 @@ public class UploadFileDto {
 
     public String getObjectName(String folderPrefix) {
         String path = buildPath(folderPrefix, FileSdkConstant.LEFT_SLASH);
-        return path + FileSdkConstant.LEFT_SLASH + getFileName();
-    }
-
-    public String getFileName() {
-        if (StringUtils.hasLength(fileType)) {
-            return UUID.randomUUID() + "." + fileType;
-        }
-        String originalFilename = file.getOriginalFilename();
-        assert originalFilename != null;
-        return UUID.randomUUID() + originalFilename.substring(originalFilename.lastIndexOf("."));
+        return path + FileSdkConstant.LEFT_SLASH + fileName;
     }
 
     public String buildPath(String folderPrefix, String fileSeparator) {

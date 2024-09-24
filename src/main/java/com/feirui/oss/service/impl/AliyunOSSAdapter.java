@@ -3,10 +3,12 @@ package com.feirui.oss.service.impl;
 import com.aliyun.oss.OSSClient;
 import com.feirui.oss.config.OssProperties;
 import com.feirui.oss.domain.dto.UploadFileDto;
+import com.feirui.oss.domain.model.DiskFileModel;
 import com.feirui.oss.service.CloudStorageService;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.ByteArrayInputStream;
+import java.util.function.Consumer;
 
 @Slf4j
 public class AliyunOSSAdapter implements CloudStorageService {
@@ -22,7 +24,7 @@ public class AliyunOSSAdapter implements CloudStorageService {
     }
 
     @Override
-    public String upload(UploadFileDto uploadFileDto) throws Exception {
+    public String upload(UploadFileDto uploadFileDto, Consumer<DiskFileModel> callback) throws Exception {
         String objectName = uploadFileDto.getObjectName(ossConfig.getFolderPrefix());
         ossClient.putObject(ossConfig.getBucketName(),
                 objectName, new ByteArrayInputStream(uploadFileDto.getFile().getBytes()));

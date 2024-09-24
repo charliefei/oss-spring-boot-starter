@@ -2,6 +2,7 @@ package com.feirui.oss.service.impl;
 
 import com.feirui.oss.config.OssProperties;
 import com.feirui.oss.domain.dto.UploadFileDto;
+import com.feirui.oss.domain.model.DiskFileModel;
 import com.feirui.oss.service.CloudStorageService;
 import com.qcloud.cos.COSClient;
 import com.qcloud.cos.ClientConfig;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.Executors;
+import java.util.function.Consumer;
 
 @Slf4j
 public class TencentCOSAdapter implements CloudStorageService {
@@ -34,7 +36,7 @@ public class TencentCOSAdapter implements CloudStorageService {
     }
 
     @Override
-    public String upload(UploadFileDto uploadFileDto) throws Exception {
+    public String upload(UploadFileDto uploadFileDto, Consumer<DiskFileModel> callback) throws Exception {
         String objectName = uploadFileDto.getObjectName(cosConfig.getFolderPrefix());
         File localFile = null;
         try {
