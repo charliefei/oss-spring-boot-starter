@@ -5,6 +5,7 @@ import com.feirui.oss.utils.QunjeEncryptUtils;
 import com.feirui.oss.utils.QunjeFileUtils;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -18,6 +19,8 @@ import java.util.UUID;
 @Accessors(chain = true)
 public class UploadFileDto {
     private MultipartFile file;
+
+    private String fileType;
 
     private String filePackage;
 
@@ -34,11 +37,14 @@ public class UploadFileDto {
     }
 
     public String getObjectName(String folderPrefix) {
-        String folderName = buildPath(folderPrefix, FileSdkConstant.LEFT_SLASH);
-        return folderName + getFileName();
+        String path = buildPath(folderPrefix, FileSdkConstant.LEFT_SLASH);
+        return path + FileSdkConstant.LEFT_SLASH + getFileName();
     }
 
     public String getFileName() {
+        if (StringUtils.hasLength(fileType)) {
+            return UUID.randomUUID() + "." + fileType;
+        }
         String originalFilename = file.getOriginalFilename();
         assert originalFilename != null;
         return UUID.randomUUID() + originalFilename.substring(originalFilename.lastIndexOf("."));

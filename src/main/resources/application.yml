@@ -2,7 +2,7 @@ spring:
   application:
     name: oss-spring-boot-starter
 oss:
-  type: aliyun
+  type: local
   aliyun:
     baseUrl: https://your-bucket-name.oss-cn-shanghai.aliyuncs.com/
     endpoint: https://oss-cn-hangzhou.aliyuncs.com
@@ -17,3 +17,5 @@ oss:
     regionName: your-region-name
     bucketName: your-bucket-name
     folderPrefix: /files
+  local:
+    folder-prefix: /files

@@ -19,10 +19,11 @@ public class LocalOSSAdapter implements CloudStorageService {
     @Override
     public String upload(UploadFileDto uploadFileDto) throws Exception {
         String objectName = uploadFileDto.getObjectName(config.getFolderPrefix());
+        log.info("localOSS upload file path: {}", objectName);
         InputStream in = uploadFileDto.getInputStream();
         OutputStream out = new FileOutputStream(objectName);
         copyFile(in, out);
-        log.info("upload OOS successful: {}", objectName);
+        log.info("localOSS upload file successfully: {}", objectName);
         return "disk-" + uploadFileDto.getFileName();
     }
 
