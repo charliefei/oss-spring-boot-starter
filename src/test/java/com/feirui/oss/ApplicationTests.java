@@ -1,7 +1,6 @@
 package com.feirui.oss;
 
 import cn.hutool.core.io.FileUtil;
-import cn.hutool.json.JSONUtil;
 import com.feirui.oss.domain.dto.UploadFileDto;
 import com.feirui.oss.service.CloudStorageService;
 import org.junit.jupiter.api.Test;
@@ -27,9 +26,16 @@ class ApplicationTests {
         dto.setFileType("png");
         dto.setFileSize(FileUtil.size(new File("D:\\壁纸\\下载.png")));
         dto.setFilePackage("feirui");
-        System.out.println(cloudStorageService.upload(dto, diskFileModel -> {
-            System.out.println(JSONUtil.toJsonStr(diskFileModel));
-        }));
+
+        String fileId = cloudStorageService.upload(dto, diskFile -> {
+            try {
+                String base64 = cloudStorageService.downloadFileToBase64(diskFile);
+                System.out.println(base64);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+        System.out.println(fileId);
     }
 
 }

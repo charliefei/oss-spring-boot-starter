@@ -27,10 +27,10 @@ public class LocalOSSAdapter implements CloudStorageService {
     @Override
     public String upload(UploadFileDto uploadFileDto, Consumer<DiskFileModel> callback) throws Exception {
         String objectName = uploadFileDto.getObjectName(config.getFolderPrefix());
-        log.info("localOSS upload file path: {}", objectName);
         InputStream in = uploadFileDto.getInputStream();
         OutputStream out = Files.newOutputStream(Paths.get(objectName));
         copyFile(in, out);
+
         DiskFileModel diskFileModel = new DiskFileModel();
         BeanUtil.copyProperties(uploadFileDto, diskFileModel);
         diskFileModel.setId(uploadFileDto.getFileId());
@@ -38,8 +38,9 @@ public class LocalOSSAdapter implements CloudStorageService {
         diskFileModel.setSize(uploadFileDto.getFileSize());
         diskFileModel.setOssType(OssType.local.getDesc());
         callback.accept(diskFileModel);
-        log.info("localOSS upload file successfully: {}", objectName);
-        return "disk-" + uploadFileDto.getFileName();
+
+        log.info("localOSS upload file success: {}", objectName);
+        return uploadFileDto.getFileId();
     }
 
     @Override
