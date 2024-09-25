@@ -15,7 +15,7 @@ public class DiskFileModel {
     private String fileName;
     private String filePackage;
     private String fileType;
-    private Long size;
+    private Long fileSize;
     private Boolean pwdSwitch;
     private String ossType;
 }

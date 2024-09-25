@@ -35,7 +35,6 @@ public class LocalOSSAdapter implements CloudStorageService {
         BeanUtil.copyProperties(uploadFileDto, diskFileModel);
         diskFileModel.setId(uploadFileDto.getFileId());
         diskFileModel.setPath(objectName);
-        diskFileModel.setSize(uploadFileDto.getFileSize());
         diskFileModel.setOssType(OssType.local.getDesc());
         callback.accept(diskFileModel);
 
