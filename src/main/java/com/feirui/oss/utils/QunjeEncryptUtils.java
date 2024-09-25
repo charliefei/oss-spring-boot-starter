@@ -52,7 +52,7 @@ public class QunjeEncryptUtils {
      * 文件流AES解密，输出文件流
      */
     public static InputStream aesDecryptToStream(InputStream input) {
-        Cipher cipher = null;
+        Cipher cipher;
         try {
             cipher = Cipher.getInstance(ALGORITHM);
             cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(AESUtils.AES_KEY.getBytes(StandardCharsets.UTF_8), "AES"));

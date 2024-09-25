@@ -6,6 +6,8 @@ import com.feirui.oss.config.OssType;
 import com.feirui.oss.domain.dto.UploadFileDto;
 import com.feirui.oss.domain.model.DiskFileModel;
 import com.feirui.oss.service.CloudStorageService;
+import com.feirui.oss.utils.QunjeEncryptUtils;
+import com.feirui.oss.utils.QunjeFileUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
@@ -38,10 +40,51 @@ public class LocalOSSAdapter implements CloudStorageService {
         return "disk-" + uploadFileDto.getFileName();
     }
 
+    public InputStream downloadFileToStream(DiskFileModel diskFile) throws Exception {
+        InputStream input;
+        input = new FileInputStream(diskFile.getPath());
+        if (diskFile.getPwdSwitch()) {
+            input = QunjeEncryptUtils.aesDecryptToStream(input);
+        }
+        return input;
+    }
+
+    public String downloadFileToBase64(DiskFileModel diskFile) throws Exception {
+        return QunjeFileUtils.byteToBase64(downloadFileToByte(diskFile));
+    }
+
+    public byte[] downloadFileToByte(DiskFileModel diskFile) throws Exception {
+        byte[] result;
+        InputStream in;
+        in = new FileInputStream(diskFile.getPath());
+        if (diskFile.getPwdSwitch()) {
+            result = QunjeEncryptUtils.aesDecryptToByte(in);
+        } else {
+            result = QunjeFileUtils.inputStream2byte(in);
+        }
+        QunjeFileUtils.closeInputStream(in);
+        return result;
+    }
+
+    public void downloadFileToOutput(DiskFileModel diskFile, OutputStream output) throws Exception {
+        InputStream in;
+        in = new FileInputStream(diskFile.getPath());
+        if (diskFile.getPwdSwitch()) {
+            QunjeFileUtils.copyFile(QunjeEncryptUtils.aesDecryptToStream(in), output);
+        } else {
+            QunjeFileUtils.copyFile(in, output);
+        }
+        QunjeFileUtils.closeInputStream(in);
+    }
+
+    public void downloadFileToPath(DiskFileModel diskFile, String targetPath) throws Exception {
+        downloadFileToOutput(diskFile, new FileOutputStream(targetPath));
+    }
+
     private static void copyFile(InputStream in, OutputStream out) {
         int len;
         try (BufferedInputStream bis = new BufferedInputStream(in);
-             BufferedOutputStream bos = new BufferedOutputStream(out);) {
+             BufferedOutputStream bos = new BufferedOutputStream(out)) {
             while ((len = bis.read()) != -1) {
                 bos.write(len);
             }
