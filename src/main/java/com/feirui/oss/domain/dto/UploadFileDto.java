@@ -26,11 +26,15 @@ import java.util.UUID;
 public class UploadFileDto {
     private MultipartFile file;
 
+    private InputStream inputStream;
+
     private String fileId;
 
     private String fileName;
 
     private String fileType;
+
+    private Long fileSize;
 
     private String filePackage;
 
@@ -38,29 +42,24 @@ public class UploadFileDto {
 
     {
         fileId = UUID.randomUUID().toString();
-        if (StringUtils.hasLength(fileType)) {
-            fileName = fileId + "." + fileType;
-        }
-        String originalFilename = file.getOriginalFilename();
-        assert originalFilename != null;
-        fileName = fileId + originalFilename.substring(originalFilename.lastIndexOf("."));
     }
 
     /**
      * 根据加密开关，获取文件流
      */
-    public InputStream getInputStream() throws IOException {
-        return pwdSwitch ? QunjeEncryptUtils.aesEncryptToStream(file.getInputStream())
-                : file.getInputStream();
+    public InputStream getInputStream() {
+        return pwdSwitch ? QunjeEncryptUtils.aesEncryptToStream(inputStream)
+                : inputStream;
     }
 
     public String getObjectName(String folderPrefix) {
+        fileName = fileId + "." + fileType;
         String path = buildPath(folderPrefix, FileSdkConstant.LEFT_SLASH);
         return path + FileSdkConstant.LEFT_SLASH + fileName;
     }
 
     public String buildPath(String folderPrefix, String fileSeparator) {
-        String path = fileSeparator + folderPrefix
+        String path = folderPrefix
                 + fileSeparator + filePackage
                 + fileSeparator + new SimpleDateFormat("yyyy/MM/dd").format(new Date())
                 + fileSeparator + FileSdkConstant.FIRE_PART_ARR[new SecureRandom().nextInt(FileSdkConstant.FIRE_PART_ARR.length)];

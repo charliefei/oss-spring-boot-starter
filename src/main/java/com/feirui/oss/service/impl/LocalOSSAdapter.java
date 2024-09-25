@@ -11,6 +11,8 @@ import com.feirui.oss.utils.QunjeFileUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.function.Consumer;
 
 @Slf4j
@@ -27,13 +29,13 @@ public class LocalOSSAdapter implements CloudStorageService {
         String objectName = uploadFileDto.getObjectName(config.getFolderPrefix());
         log.info("localOSS upload file path: {}", objectName);
         InputStream in = uploadFileDto.getInputStream();
-        OutputStream out = new FileOutputStream(objectName);
+        OutputStream out = Files.newOutputStream(Paths.get(objectName));
         copyFile(in, out);
         DiskFileModel diskFileModel = new DiskFileModel();
         BeanUtil.copyProperties(uploadFileDto, diskFileModel);
         diskFileModel.setId(uploadFileDto.getFileId());
         diskFileModel.setPath(objectName);
-        diskFileModel.setSize(uploadFileDto.getFile().getSize());
+        diskFileModel.setSize(uploadFileDto.getFileSize());
         diskFileModel.setOssType(OssType.local.getDesc());
         callback.accept(diskFileModel);
         log.info("localOSS upload file successfully: {}", objectName);
@@ -43,7 +45,7 @@ public class LocalOSSAdapter implements CloudStorageService {
     @Override
     public InputStream downloadFileToStream(DiskFileModel diskFile) throws Exception {
         InputStream input;
-        input = new FileInputStream(diskFile.getPath());
+        input = Files.newInputStream(Paths.get(diskFile.getPath()));
         if (diskFile.getPwdSwitch()) {
             input = QunjeEncryptUtils.aesDecryptToStream(input);
         }
@@ -59,7 +61,7 @@ public class LocalOSSAdapter implements CloudStorageService {
     public byte[] downloadFileToByte(DiskFileModel diskFile) throws Exception {
         byte[] result;
         InputStream in;
-        in = new FileInputStream(diskFile.getPath());
+        in = Files.newInputStream(Paths.get(diskFile.getPath()));
         if (diskFile.getPwdSwitch()) {
             result = QunjeEncryptUtils.aesDecryptToByte(in);
         } else {
@@ -72,7 +74,7 @@ public class LocalOSSAdapter implements CloudStorageService {
     @Override
     public void downloadFileToOutput(DiskFileModel diskFile, OutputStream output) throws Exception {
         InputStream in;
-        in = new FileInputStream(diskFile.getPath());
+        in = Files.newInputStream(Paths.get(diskFile.getPath()));
         if (diskFile.getPwdSwitch()) {
             QunjeFileUtils.copyFile(QunjeEncryptUtils.aesDecryptToStream(in), output);
         } else {
@@ -83,7 +85,7 @@ public class LocalOSSAdapter implements CloudStorageService {
 
     @Override
     public void downloadFileToPath(DiskFileModel diskFile, String targetPath) throws Exception {
-        downloadFileToOutput(diskFile, new FileOutputStream(targetPath));
+        downloadFileToOutput(diskFile, Files.newOutputStream(Paths.get(targetPath)));
     }
 
     private static void copyFile(InputStream in, OutputStream out) {
