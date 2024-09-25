@@ -5,7 +5,6 @@ import com.feirui.oss.service.CloudStorageService;
 import com.feirui.oss.service.impl.AliyunOSSAdapter;
 import com.feirui.oss.service.impl.LocalOSSAdapter;
 import com.feirui.oss.service.impl.TencentCOSAdapter;
-import jakarta.annotation.Resource;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -22,24 +21,21 @@ import org.springframework.context.annotation.Configuration;
 @EnableConfigurationProperties(OssProperties.class)
 @ConditionalOnClass(CloudStorageService.class)
 public class OssAutoConfiguration {
-    @Resource
-    private OssProperties ossProperties;
-
     @Bean
     @ConditionalOnProperty(prefix = "oss", name = "type", havingValue = "aliyun")
-    public CloudStorageService aliyunOSS() {
+    public CloudStorageService aliyunOSS(OssProperties ossProperties) {
         return new AliyunOSSAdapter(ossProperties.getAliyun());
     }
 
     @Bean
     @ConditionalOnProperty(prefix = "oss", name = "type", havingValue = "tencent")
-    public CloudStorageService tencentCOS() {
+    public CloudStorageService tencentCOS(OssProperties ossProperties) {
         return new TencentCOSAdapter(ossProperties.getTencent());
     }
 
     @Bean
     @ConditionalOnProperty(prefix = "oss", name = "type", havingValue = "local")
-    public CloudStorageService localOSS() {
+    public CloudStorageService localOSS(OssProperties ossProperties) {
         return new LocalOSSAdapter(ossProperties.getLocal());
     }
 }

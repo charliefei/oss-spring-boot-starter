@@ -40,6 +40,7 @@ public class LocalOSSAdapter implements CloudStorageService {
         return "disk-" + uploadFileDto.getFileName();
     }
 
+    @Override
     public InputStream downloadFileToStream(DiskFileModel diskFile) throws Exception {
         InputStream input;
         input = new FileInputStream(diskFile.getPath());
@@ -49,10 +50,12 @@ public class LocalOSSAdapter implements CloudStorageService {
         return input;
     }
 
+    @Override
     public String downloadFileToBase64(DiskFileModel diskFile) throws Exception {
         return QunjeFileUtils.byteToBase64(downloadFileToByte(diskFile));
     }
 
+    @Override
     public byte[] downloadFileToByte(DiskFileModel diskFile) throws Exception {
         byte[] result;
         InputStream in;
@@ -66,6 +69,7 @@ public class LocalOSSAdapter implements CloudStorageService {
         return result;
     }
 
+    @Override
     public void downloadFileToOutput(DiskFileModel diskFile, OutputStream output) throws Exception {
         InputStream in;
         in = new FileInputStream(diskFile.getPath());
@@ -77,6 +81,7 @@ public class LocalOSSAdapter implements CloudStorageService {
         QunjeFileUtils.closeInputStream(in);
     }
 
+    @Override
     public void downloadFileToPath(DiskFileModel diskFile, String targetPath) throws Exception {
         downloadFileToOutput(diskFile, new FileOutputStream(targetPath));
     }

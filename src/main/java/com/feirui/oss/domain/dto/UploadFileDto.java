@@ -3,7 +3,10 @@ package com.feirui.oss.domain.dto;
 import com.feirui.oss.constant.FileSdkConstant;
 import com.feirui.oss.utils.QunjeEncryptUtils;
 import com.feirui.oss.utils.QunjeFileUtils;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,6 +19,9 @@ import java.util.Date;
 import java.util.UUID;
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Accessors(chain = true)
 public class UploadFileDto {
     private MultipartFile file;
