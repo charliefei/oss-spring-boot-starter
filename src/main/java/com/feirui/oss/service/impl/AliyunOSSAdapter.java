@@ -28,9 +28,18 @@ public class AliyunOSSAdapter implements CloudStorageService {
         String objectName = uploadFileDto.getObjectName(ossConfig.getFolderPrefix());
         ossClient.putObject(ossConfig.getBucketName(),
                 objectName, new ByteArrayInputStream(uploadFileDto.getFile().getBytes()));
-        String filePath = ossConfig.getBaseUrl() + objectName;
+        String filePath = getUrl(objectName);
         log.info("upload OOS successful: {}", filePath);
         return filePath;
+    }
+
+    public String getUrl(String objectName) {
+        return "https://" +
+                ossConfig.getBucketName() +
+                "." +
+                ossConfig.getEndpoint() +
+                "/" +
+                objectName;
     }
 
 }

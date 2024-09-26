@@ -22,19 +22,19 @@ import org.springframework.context.annotation.Configuration;
 @ConditionalOnClass(CloudStorageService.class)
 public class OssAutoConfiguration {
     @Bean
-    @ConditionalOnProperty(prefix = "oss", name = "type", havingValue = "aliyun")
+    @ConditionalOnProperty(prefix = "spring.oss", name = "type", havingValue = "aliyun")
     public CloudStorageService aliyunOSS(OssProperties ossProperties) {
         return new AliyunOSSAdapter(ossProperties.getAliyun());
     }
 
     @Bean
-    @ConditionalOnProperty(prefix = "oss", name = "type", havingValue = "tencent")
+    @ConditionalOnProperty(prefix = "spring.oss", name = "type", havingValue = "tencent")
     public CloudStorageService tencentCOS(OssProperties ossProperties) {
         return new TencentCOSAdapter(ossProperties.getTencent());
     }
 
     @Bean
-    @ConditionalOnProperty(prefix = "oss", name = "type", havingValue = "local")
+    @ConditionalOnProperty(prefix = "spring.oss", name = "type", havingValue = "local")
     public CloudStorageService localOSS(OssProperties ossProperties) {
         return new LocalOSSAdapter(ossProperties.getLocal());
     }

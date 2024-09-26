@@ -10,7 +10,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @date 2024/07/19 17:22 周五
  */
 @Data
-@ConfigurationProperties(prefix = "oss")
+@ConfigurationProperties(prefix = "spring.oss")
 public class OssProperties {
     /**
      * @see OssType
@@ -25,7 +25,6 @@ public class OssProperties {
 
     @Data
     public static class Aliyun {
-        private String baseUrl;
         private String endpoint;
         private String accessKeyId;
         private String accessKeySecret;
@@ -35,7 +34,7 @@ public class OssProperties {
 
     @Data
     public static class Tencent {
-        private String baseUrl;
+        private String endpoint;
         private String accessKey;
         private String secretKey;
         private String regionName;

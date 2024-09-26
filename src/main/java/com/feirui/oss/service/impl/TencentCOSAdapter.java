@@ -45,13 +45,22 @@ public class TencentCOSAdapter implements CloudStorageService {
             // 返回一个异步结果Upload, 可同步的调用waitForUploadResult等待upload结束, 成功返回UploadResult, 失败抛出异常
             Upload upload = transferManager.upload(putObjectRequest);
             UploadResult uploadResult = upload.waitForUploadResult();
-            String filePath = cosConfig.getBaseUrl() + uploadResult.getKey();
+            String filePath = getUrl(uploadResult.getKey());
             log.info("upload COS successful: {}", filePath);
             return filePath;
         } finally {
             transferManager.shutdownNow();
             localFile.delete();
         }
+    }
+
+    public String getUrl(String objectName) {
+        return "https://" +
+                cosConfig.getBucketName() +
+                "." +
+                cosConfig.getEndpoint() +
+                "/" +
+                objectName;
     }
 
     /**

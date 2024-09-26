@@ -38,4 +38,8 @@ class ApplicationTests {
         System.out.println(fileId);
     }
 
+    @Test
+    void test() {
+        System.out.println(cloudStorageService);
+    }
 }
