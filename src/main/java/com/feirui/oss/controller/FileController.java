@@ -34,14 +34,15 @@ public class FileController {
                     .pwdSwitch(true)
                     .build();
 
-            cloudStorageService.upload(dto, diskFileModel -> {
+            String res = cloudStorageService.upload(dto, diskFileModel -> {
                 // diskFileModel保存到数据库 ...
                 String jsonStr = JSONUtil.toJsonStr(diskFileModel);
-                map.put("data", jsonStr);
+                System.out.println(jsonStr);
             });
             map.put("success", 1);
             map.put("code", 200);
             map.put("msg", "上传文件成功");
+            map.put("data", res);
             return map;
         } catch (Exception e) {
             log.error("上传文件失败", e);
