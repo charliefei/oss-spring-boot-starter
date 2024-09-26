@@ -4,6 +4,7 @@ import com.feirui.oss.config.OssProperties;
 import com.feirui.oss.service.CloudStorageService;
 import com.feirui.oss.service.impl.AliyunOSSAdapter;
 import com.feirui.oss.service.impl.LocalOSSAdapter;
+import com.feirui.oss.service.impl.MinioOSSAdapter;
 import com.feirui.oss.service.impl.TencentCOSAdapter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -31,6 +32,12 @@ public class OssAutoConfiguration {
     @ConditionalOnProperty(prefix = "spring.oss", name = "type", havingValue = "tencent")
     public CloudStorageService tencentCOS(OssProperties ossProperties) {
         return new TencentCOSAdapter(ossProperties.getTencent());
+    }
+
+    @Bean
+    @ConditionalOnProperty(prefix = "spring.oss", name = "type", havingValue = "minio")
+    public CloudStorageService minioOSS(OssProperties ossProperties) {
+        return new MinioOSSAdapter(ossProperties.getMinio());
     }
 
     @Bean

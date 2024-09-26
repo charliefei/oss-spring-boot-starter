@@ -8,7 +8,8 @@ import lombok.Getter;
 public enum OssType {
     aliyun(1, "aliyun"),
     tencent(2, "tencent"),
-    local(3, "local");
+    minio(3, "minio"),
+    local(4, "local");
 
     private final int code;
     private final String desc;

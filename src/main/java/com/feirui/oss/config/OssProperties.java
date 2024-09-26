@@ -21,6 +21,8 @@ public class OssProperties {
 
     private Tencent tencent = new Tencent();
 
+    private Minio minio = new Minio();
+
     private Local local = new Local();
 
     @Data
@@ -38,6 +40,15 @@ public class OssProperties {
         private String accessKey;
         private String secretKey;
         private String regionName;
+        private String bucketName;
+        private String folderPrefix;
+    }
+
+    @Data
+    public static class Minio {
+        private String endpoint;
+        private String accessKey;
+        private String secretKey;
         private String bucketName;
         private String folderPrefix;
     }

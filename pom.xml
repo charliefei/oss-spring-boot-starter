@@ -49,6 +49,12 @@
             <artifactId>cos_api</artifactId>
             <version>5.6.219.1</version>
         </dependency>
+        <!--minio对象存储服务-->
+        <dependency>
+            <groupId>io.minio</groupId>
+            <artifactId>minio</artifactId>
+            <version>8.2.0</version>
+        </dependency>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
