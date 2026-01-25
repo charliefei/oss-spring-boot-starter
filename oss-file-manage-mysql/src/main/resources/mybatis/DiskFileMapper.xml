@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.feirui.oss.manage.mysql.mapper.DiskFileMapper">
+
+    <sql id="baseColumn">
+        pid, id, `path`, file_name, file_package, file_type, mime_type, company_code, create_date, pwd_switch, `size`, impl_name
+    </sql>
+
+    <insert id="insert">
+        insert into disk_file (id, `path`, file_name, file_package, file_type, mime_type,
+                               company_code, create_date, pwd_switch, `size`, impl_name)
+        values (#{id}, #{path}, #{fileName}, #{filePackage}, #{fileType}, #{mimeType},
+                #{companyCode}, #{createDate}, #{pwdSwitch}, #{size}, #{implName});
+    </insert>
+
+    <insert id="insertBatch">
+        insert into disk_file (id, `path`, file_name, file_package, file_type, mime_type,
+                               company_code, create_date, pwd_switch, `size`, impl_name)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.id}, #{item.path}, #{item.fileName}, #{item.filePackage}, #{item.fileType}, #{item.mimeType},
+             #{item.companyCode}, #{item.createDate}, #{item.pwdSwitch}, #{item.size}, #{item.implName})
+        </foreach>
+    </insert>
+
+    <delete id="deleteById">
+        delete from disk_file
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteBatchByIds">
+        delete from disk_file where id in
+        <foreach collection="list" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <select id="selectById" resultType="com.feirui.oss.sdk.domain.entity.DiskFile">
+        select
+        <include refid="baseColumn"/>
+        from disk_file
+        where id = #{id}
+    </select>
+
+    <select id="listByIds" resultType="com.feirui.oss.sdk.domain.entity.DiskFile">
+        select
+        <include refid="baseColumn"/>
+        from disk_file
+        where id in
+        <foreach collection="list" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="countTotalSize" resultType="long">
+        select ifnull(sum(size), 0)
+        from disk_file
+        where company_code = #{companyCode}
+    </select>
+
+</mapper>

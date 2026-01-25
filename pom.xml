@@ -94,6 +94,17 @@
                 <artifactId>druid-spring-boot-starter</artifactId>
                 <version>${druid.spring.boot.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.feirui</groupId>
+                <artifactId>oss-file-sdk</artifactId>
+                <version>${oss-spring-boot-starter.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.feirui</groupId>
+                <artifactId>oss-file-manage-mysql</artifactId>
+                <version>${oss-spring-boot-starter.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
