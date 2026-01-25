@@ -1,6 +1,7 @@
 package com.feirui.oss.sdk.utils;
 
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.io.IORuntimeException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
@@ -86,6 +87,21 @@ public class FileUtils {
     }
 
     /**
+     * 图片字节数组转base64图片
+     *
+     * @param bytes 文件字节数组
+     * @return java.lang.String base图片
+     */
+    public static String byteToBase64(byte[] bytes) {
+        try {
+            return Base64.getEncoder().encodeToString(bytes);
+        } catch (Exception e) {
+            log.error("图片字节数组转base64图片失败 >>>>>> ", e);
+        }
+        return "";
+    }
+
+    /**
      * 关闭输入流
      *
      * @param in 待关闭输入流
@@ -142,6 +158,26 @@ public class FileUtils {
         } else {
             File dir = FileUtil.file(dirPath);
             return FileUtil.mkdir(dir);
+        }
+    }
+
+    /**
+     * 强制删除文件或目录
+     * 1、如果是文件，直接删除
+     * 2、如果是目录，删除目录下所有文件和子目录
+     *
+     * @param file 待删除文件或目录
+     * @return boolean 删除结果
+     */
+    public static boolean forceDeleteFile(File file) {
+        if (file == null || !file.exists()) {
+            return false;
+        }
+        try {
+            return FileUtil.del(file);
+        } catch (IORuntimeException e) {
+            log.error("强制删除文件或目录失败 >>>>>>>> ", e);
+            return false;
         }
     }
 

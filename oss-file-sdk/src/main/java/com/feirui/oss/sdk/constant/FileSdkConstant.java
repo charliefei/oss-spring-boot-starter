@@ -1,16 +1,14 @@
 package com.feirui.oss.sdk.constant;
 
 import com.feirui.oss.sdk.config.CommonFileProperties;
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.Resource;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.InitializingBean;
 
-@Component
-public class FileSdkConstant {
+public class FileSdkConstant implements InitializingBean {
+    private final CommonFileProperties commonFileProperties;
 
-    @Resource
-    private CommonFileProperties commonFileProperties;
+    public FileSdkConstant(CommonFileProperties commonFileProperties) {
+        this.commonFileProperties = commonFileProperties;
+    }
 
     /**
      * 动态配置的最顶层父级存储目录
@@ -42,9 +40,8 @@ public class FileSdkConstant {
      */
     public static final Integer NOT_USED_PASSWORD = 1;
 
-    @PostConstruct
-    @Order(1)
-    public void init() {
+    @Override
+    public void afterPropertiesSet() {
         UPLOAD_PACKAGE = commonFileProperties.getBasePath() + FILE_PATH;
     }
 }
